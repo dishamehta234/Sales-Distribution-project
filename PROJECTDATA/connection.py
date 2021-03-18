@@ -22,6 +22,85 @@ class Connection():
                 session varchar
             );'''
             self.cr.execute(user);
+            ptnr = '''CREATE TABLE partner(
+                partner_id SERIAL PRIMARY KEY,
+                id SERIAL NOT NULL,
+                role varchar NOT NULL,
+                name varchar NOT NULL,
+                address varchar NOT NULL,
+                FOREIGN KEY (id) REFERENCES users (id)
+            );'''
+            self.cr.execute(ptnr);
+            zon = '''CREATE TABLE zone(
+                zone_id SERIAL PRIMARY KEY,
+                zone_name varchar NOT NULL
+            );'''
+            self.cr.execute(zon);
+            shop_dtl = '''CREATE TABLE shop_detail(
+                shop_id SERIAL PRIMARY KEY,
+                partner_id SERIAL NOT NULL,
+                zone_id SERIAL NOT NULL,
+                s_name varchar NOT NULL,
+                s_address varchar NOT NULL,
+                s_target_mthly varchar NOT NULL,
+                status boolean NOT NULL,
+                FOREIGN KEY (partner_id) REFERENCES partner (partner_id),
+                FOREIGN KEY (zone_id) REFERENCES zone (zone_id)
+            );'''
+            self.cr.execute(shop_dtl);
+            visit_plan = '''CREATE TABLE visiting_plan(
+                v_id SERIAL PRIMARY KEY,
+                partner_id SERIAL NOT NULL,
+                zone_id SERIAL  NOT NULL,
+                day varchar NOT NULL,
+                FOREIGN KEY (partner_id) REFERENCES partner (partner_id),
+                FOREIGN KEY (zone_id) REFERENCES zone (zone_id)
+            );'''
+            self.cr.execute(visit_plan);
+            shop_visit = '''CREATE TABLE shop_visited(
+                sv_id SERIAL PRIMARY KEY,
+                partner_id SERIAL NOT NULL,
+                shop_id SERIAL NOT NULL,
+                visiting_time TIME NOT NULL,
+                FOREIGN KEY (partner_id) REFERENCES partner (partner_id),
+                FOREIGN KEY (shop_id) REFERENCES shop_detail (shop_id)
+            );'''
+            self.cr.execute(shop_visit);
+            prdct = '''CREATE TABLE product(
+                p_id SERIAL PRIMARY KEY,
+                p_name varchar NOT NULL,
+                p_price varchar NOT NULL
+            );'''
+            self.cr.execute(prdct);
+            ord_dtl = '''CREATE TABLE order_detail(
+                ord_id SERIAL PRIMARY KEY,
+                p_id SERIAL NOT NULL,
+                qty varchar NOT NULL,
+                price varchar NOT NULL,
+                FOREIGN KEY (p_id) REFERENCES product (p_id)
+            );'''
+            self.cr.execute(ord_dtl);
+            ordr = '''CREATE TABLE order(
+                o_id SERIAL PRIMARY KEY,
+                partner_id SERIAL NOT NULL,
+                shop_id SERIAL NOT NULL,
+                date_order DATE NOT NULL,
+                ord_status BOOLEAN NOT NULL,
+                payment_status BOOLEAN NOT NULL,
+                FOREIGN KEY (partner_id) REFERENCES partner (partner_id),
+                FOREIGN KEY (shop_id) REFERENCES shop_detail (shop_id)
+            );'''
+            self.cr.execute(ordr);
+            paymt = '''CREATE TABLE payment(
+                p_id SERIAL PRIMARY KEY,
+                shop_id SERIAL NOT NULL,
+                date_pymt DATE NOT NULL,
+                amount varchar NOT NULL,
+                payment_mthd BOOLEAN NOT NULL,
+                remark varchar NOT NULL,
+                FOREIGN KEY (shop_id) REFERENCES shop_detail (shop_id)
+            );'''
+            self.cr.execute(paymt);
         else:
             self.create_connection(self.db_name);
 
@@ -59,3 +138,4 @@ class Connection():
     def user_logout(self, data):
         print(data)
         self.cr.execute("UPDATE users set session=null where session='%s'" % (data['session_id']))
+        
