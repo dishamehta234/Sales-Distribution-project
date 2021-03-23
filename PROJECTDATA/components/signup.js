@@ -13,6 +13,8 @@ const SIGNUP_TEMPLATE = xml/* xml */ `
             </div>
             <div class="card-body">
                 <form action="/signup" t-on-submit.prevent="_onSubmitForm">
+                    <input type="radio" name="role" id="shrole" value="Shopper"/>Shopper
+                    <input type="radio" name="role" id="sprole" value="Sales Person"/>Sales Person
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
@@ -95,20 +97,4 @@ export class Sign_Up extends Component{
         _onKeyUpPwd(ev) {
             this._checkPwd();
         }
-
-    sign_up_function(){
-        var email ,m_no,pswd,crfpswd;
-        email = document.getElementById("email").value;
-        m_no = document.getElementById("mobile").value;
-        pswd = document.getElementById("pass").value;
-        crfpswd = document.getElementById("confpass").value;
-
-        if(/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(formdata.email.value) && /^\d{10}$/)
-        {
-                document.getElementById("error").value="Valid details";
-        }   
-        else{
-                document.getElementById("error").value="InValid details";
-        }       
-    }
 }
