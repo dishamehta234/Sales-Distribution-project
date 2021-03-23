@@ -19,13 +19,13 @@ class Connection():
                 email varchar  NOT NULL,
                 password varchar NOT NULL,
                 mobile_no varchar NOT NULL,
+                role varchar NOT NULL,
                 session varchar
             );'''
             self.cr.execute(user);
             ptnr = '''CREATE TABLE partner(
                 partner_id SERIAL PRIMARY KEY,
                 id SERIAL NOT NULL,
-                role varchar NOT NULL,
                 name varchar NOT NULL,
                 address varchar NOT NULL,
                 FOREIGN KEY (id) REFERENCES users (id)
@@ -119,7 +119,7 @@ class Connection():
         return self.cr.fetchone()
 
     def create_user(self, dictn):
-        user = """INSERT INTO users (email, password, mobile_no) VALUES ('%s', '%s', '%s')""" % (dictn['email'], dictn['password'], dictn['mobilenum']);
+        user = """INSERT INTO users (email, password, mobile_no,role) VALUES ('%s', '%s', '%s', '%s')""" % (dictn['email'], dictn['password'], dictn['mobilenum'], dictn['role']);
         self.cr.execute(user)
         print('>>> Data Added')
 
