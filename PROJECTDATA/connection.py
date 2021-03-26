@@ -80,8 +80,8 @@ class Connection():
                 FOREIGN KEY (p_id) REFERENCES product (p_id)
             );'''
             self.cr.execute(ord_dtl);
-            ordr = '''CREATE TABLE order(
-                o_id SERIAL PRIMARY KEY,
+            ordrr ='''CREATE TABLE orderr(
+                ord_id SERIAL PRIMARY KEY,
                 partner_id SERIAL NOT NULL,
                 shop_id SERIAL NOT NULL,
                 date_order DATE NOT NULL,
@@ -90,8 +90,8 @@ class Connection():
                 FOREIGN KEY (partner_id) REFERENCES partner (partner_id),
                 FOREIGN KEY (shop_id) REFERENCES shop_detail (shop_id)
             );'''
-            self.cr.execute(ordr);
-            paymt = '''CREATE TABLE payment(
+            self.cr.execute(ordrr);
+            paymnt = '''CREATE TABLE payment(
                 p_id SERIAL PRIMARY KEY,
                 shop_id SERIAL NOT NULL,
                 date_pymt DATE NOT NULL,
@@ -100,7 +100,7 @@ class Connection():
                 remark varchar NOT NULL,
                 FOREIGN KEY (shop_id) REFERENCES shop_detail (shop_id)
             );'''
-            self.cr.execute(paymt);
+            self.cr.execute(paymnt);
         else:
             self.create_connection(self.db_name);
 
@@ -111,11 +111,15 @@ class Connection():
         self.cr = self.connection.cursor()
 
     def chk_eml(self, data):
-        self.cr.execute("SELECT id FROM users WHERE email='%s'" % (data['email']))
+        self.cr.execute("SELECT id FROM users WHERE email='%s'" % (data['unm']))
         return self.cr.fetchone()
 
     def chk_pass(self, data):
-        self.cr.execute("SELECT id FROM users WHERE password='%s'" % (data['password']))
+        self.cr.execute("SELECT id FROM users WHERE password='%s'" % (data['pass']))
+        return self.cr.fetchone()
+
+    def chk_role(self,data):
+        self.cr.execute("SELECT role FROM users WHERE email='%s' and password='%s'" % (data['unm'], data['pass']))
         return self.cr.fetchone()
 
     def create_user(self, dictn):

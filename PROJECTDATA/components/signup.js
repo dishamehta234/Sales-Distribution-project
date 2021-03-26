@@ -13,8 +13,8 @@ const SIGNUP_TEMPLATE = xml/* xml */ `
             </div>
             <div class="card-body">
                 <form action="/signup" t-on-submit.prevent="_onSubmitForm">
-                    <input type="radio" name="role" id="shrole" value="Shopper"/>Shopper
-                    <input type="radio" name="role" id="sprole" value="Sales Person"/>Sales Person
+                    <input type="radio" name="role" id="shrole" value="Shopper" />Shopper
+                    <input type="radio" name="role" id="sprole" value="Sales Person" />Sales Person
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
@@ -46,11 +46,6 @@ const SIGNUP_TEMPLATE = xml/* xml */ `
                         <input type="submit" value="Register" class="btn float-right login_btn" />
                     </div>
                 </form>
-            </div>
-            <div class="card-footer">
-                <div class="d-flex justify-content-center links">
-                    Alrady have an account?<a href="#">Sign In</a>
-                </div>
             </div>
         </div>
     </div>

@@ -28,22 +28,26 @@ class myHandler(SimpleHTTPRequestHandler):
                 return self.wfile.write(json.dumps({'credentials': True}).encode()) 
             else:
                 return self.wfile.write(json.dumps({'credentials': False}).encode())
-            # return self.wfile.write(True)
         elif self.path == '/do_login':
             data = self.rfile.read(int(self.headers.get('Content-Length')))
             data = json.loads(data)
+            chk_role = self.db_connection.chk_role(data)
             user_data = self.db_connection.user_exists(data)
+            chk_eml = self.db_connection.chk_eml(data)
+            chk_pass = self.db_connection.chk_pass(data)
             if user_data is None:
-                chk_eml = self.db_connection.chk_eml(data)
-                chk_pass = self.db_connection.chk_pass(data)
                 if chk_eml is None:
-                    return self.wfile.write(json.dumps({'email': False}).encode())
+                     return self.wfile.write(json.dumps({'email': False}).encode())
                 elif chk_pass is None:
-                    return self.wfile.write(json.dumps({'pass': False}).encode())
+                     return self.wfile.write(json.dumps({'pass': False}).encode())
             else:
                 session_id = str(uuid.uuid4())
                 self.db_connection.create_user_session(session_id, user_data[0])
-                return self.wfile.write(json.dumps({'session_id': session_id, 'user_id': user_data[0], 'is_valid': True}).encode())
+                if "Shopper" in chk_role:
+                    return self.wfile.write(json.dumps({'session_id': session_id, 'user_id': user_data[0],'is_valid': True, 'role':"Shopper"}).encode())
+                else:
+                    return self.wfile.write(json.dumps({'session_id': session_id, 'user_id': user_data[0], 'is_valid': True, 'role':"Sales Person"}).encode())
+                
         elif self.path == '/session_validate':
             data = self.rfile.read(int(self.headers.get('Content-Length')))
             data = json.loads(data)
@@ -68,6 +72,7 @@ class myHandler(SimpleHTTPRequestHandler):
                 session_info = {
                     'user_id': None,
                     'is_valid': False,
+                    'user_role': None,
                 }
                 if Cookie:
                     session_cookie = parse_qs(Cookie.replace(' ', ''))
@@ -78,7 +83,8 @@ class myHandler(SimpleHTTPRequestHandler):
                             session_info = {
                                 'user_id': user[0],
                                 'is_valid': True,
-                                'session_id': session_id
+                                'session_id': session_id,
+                                'user_role': True
                             }
                 html = html.replace('$session_info', json.dumps(session_info))
                 self.send_response(200)

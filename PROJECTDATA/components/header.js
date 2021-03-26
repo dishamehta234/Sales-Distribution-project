@@ -3,8 +3,10 @@ const { xml } = owl.tags;
 const { RouteComponent } = owl.router;
 const { whenReady } = owl.utils;
 const { useRef, useDispatch, useState, useStore } = owl.hooks;
-const {qweb} = owl;
+const { qweb } = owl;
 
+import { Order_sales } from "./salesPerson/order_sales.js";
+import { Payment } from "./salesPerson/payment.js";
 
 const HEADER_TEMPLATE = xml/* xml */ `
 <header class="top-header">
@@ -25,9 +27,32 @@ const HEADER_TEMPLATE = xml/* xml */ `
                         	</a>
                        	</li>
                        	<t t-if="state.user_id and state.is_valid">
-		                    <li class="nav-item">
-		                        <button class="nav-link btn-warning mr-2" href="#" t-on-click="logout">Logout</button>
-		                    </li>
+                       		<t t-if="state.user_role == 'Shopper' " >
+                       			<li class="nav-item">
+			                    	<button class="nav-link btn-primary mr-2" href="#" t-on-click="logout">Notification</button>
+			                    </li>
+			                    <li class="nav-item">
+			                    	<button class="nav-link btn-primary mr-2" href="#" t-on-click="logout">Shop's Order</button>
+			                    </li>
+			                    <li class="nav-item">
+			                        <button class="nav-link btn-warning mr-2" href="#" t-on-click="logout">Logout</button>
+			                    </li>
+			                    
+			                </t>
+			                <t t-else="state.user_role == 'Sales Person' ">
+                                <li class="nav-item col-md-2 col-sm-6 pl-4">
+                                     <button class="btn btn-primary mr-2" href="#" t-on-click="logout">Notification</button>
+                                </li>
+                                <li class="nav-item col-md-2 col-sm-6">
+                                    <button class="btn btn-primary mr-2" href="#" t-on-click="order_Sales">Order</button>
+                                </li>
+                                <li class="nav-item col-md-2 col-sm-6">
+                                    <button class="btn btn-primary mr-2" href="#" t-on-click="payment()">Payment</button>
+                                </li>
+                                <li class="nav-item col-md-2 col-sm-6">
+                                    <button class="btn btn-danger mr-2" href="#" t-on-click="logout">logout</button>
+                                </li>
+                            </t>
                 		</t>
                        	<t t-else="">
 	                        <li>
@@ -103,11 +128,12 @@ export class Header extends Component{
 	    // from willstar
 	     this._updateState();
     }
-     _updateState() {
+     _updateState() {debugger
         this.state = useState({
             user_id: odoo.session_info.user_id,
             is_valid: odoo.session_info.is_valid,
-            session_id: odoo.session_info.session_id
+            session_id: odoo.session_info.session_id,
+            user_role: odoo.session_info.user_role
         });
     }
     Home(ev){
@@ -122,20 +148,27 @@ export class Header extends Component{
 	_onClickReg(){
 		return this.env.router.navigate({ to: 'signup' });
 	}
-	 async logout(ev){
-            this.valid = ev.valid;
-            const session_id = document.cookie;
+	order_Sales(ev){
+        this.env.router.navigate({ to: 'ordersales'});
+    }
+    payment(ev){
+        this.env.router.navigate({ to: 'payment'});
+    }
+	 async logout(ev){debugger
             const xhr = new window.XMLHttpRequest();
             xhr.open('POST', '/do_logout');
-            xhr.send(JSON.stringify({'session_id': session_id}));
+            xhr.send(JSON.stringify({'session_id': this.state.session_id}));
             xhr.onload = async () => {
                 const response = JSON.parse(xhr.response);
                 if (response.logout === 'success') {
+                	alert(response.logout)
+
                     document.cookie = 'session_id=null';
                     odoo.session_info = {
                         user_id: null,
                         is_valid: false,
                         session_id: null,
+                        user_role: null
                     };
                     this._updateState();
                     this.env.router.navigate({ to: 'home' });

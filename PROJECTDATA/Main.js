@@ -14,7 +14,8 @@ import { Header } from "./components/header.js";
 import { Silder } from "./components/silder.js";
 import { User_Form } from "./components/user_form.js";
 import { Login_Home } from "./components/loginHome.js";
-
+import { Order_sales } from "./components/salesPerson/order_sales.js";
+import { Payment } from "./components/salesPerson/payment.js";
 
 const APP_TEMPLATE = xml/* xml */ `
    	<div>
@@ -25,7 +26,7 @@ const APP_TEMPLATE = xml/* xml */ `
 
 class App extends Component {
     static template = APP_TEMPLATE;
-    static components = {  Footer, RouteComponent, Header };
+    static components = {  Footer, RouteComponent, Header, Order_sales, Payment };
 
     async willStart() {
             const session_id = localStorage.getItem('session_id');
@@ -59,6 +60,8 @@ class App extends Component {
 		{ name: "regshop", path: "/regshop", component: Reg_shop },
         { name: "loginhome", path: "/loginhome", component: Login_Home },
         { name: "userform", path: "/user_form", component: User_Form },
+        { name: "ordersales", path: "/ordersales", component: Order_sales },
+        { name: "payment", path: "/payment", component: Payment },
 		{ name: "home", path: "/", component: Silder }
 	];
 
