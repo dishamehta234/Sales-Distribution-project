@@ -1,6 +1,7 @@
 const { Component, useState, mount } = owl;
 const { xml } = owl.tags;
 
+
 const SIGNIN_TEMPLATE =xml /* xml */
   `<div>
     <div class="container">
@@ -9,32 +10,39 @@ const SIGNIN_TEMPLATE =xml /* xml */
           <div class="card-header">
             <h3 align="center">Sign In</h3>
           </div>
-          <div class="card-body">
-            <form action="#" t-on-submit.prevent="OnLoginsubmit">
-              <div class="input-group form-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">
-                    <i class="fas fa-user"></i>
-                  </span>
-                </div>
-                <input type="text" class="form-control" placeholder="username" name="unm" />
-              </div>
-              <div class="input-group form-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">
-                    <i class="fas fa-key"></i>
-                  </span>
-                </div>
-                <input type="password" class="form-control" placeholder="password" name="pass" />
-              </div>
-              <div class="row align-items-center remember">
-                <input type="checkbox" />Remember Me
-              </div>
-              <div class="form-group">
-                <input type="submit" value="Login" class="btn float-right login_btn" />
-              </div>
-              <t t-esc="state.invalid"/>
-            </form>
+        <div class="card-body">
+        <form action="#" t-on-submit.prevent="OnLoginsubmit">
+          <div class="input-group form-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="fas fa-user"></i>
+              </span>
+            </div>
+            <input type="text" class="form-control" placeholder="username" name="unm" />
+          </div>
+          <div class="input-group form-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text">
+                <i class="fas fa-key"></i>
+              </span>
+            </div>
+            <input type="password" class="form-control" placeholder="password" name="pass" />
+          </div>
+          <div class="row align-items-center remember">
+            <input type="checkbox" />Remember Me
+          </div>
+          <div class="form-group">
+            <input type="submit" value="Login" class="btn float-right login_btn" />
+          </div>
+        </form>
+        </div>
+          <div class="card-footer">
+            <div class="d-flex justify-content-center links">
+              Don't have an account?<a href="#" t-on-click="onClickReg">Sign Up</a>
+            </div>
+            <div class="d-flex justify-content-center">
+              <a href="#">Forgot your password ?</a>
+            </div>
           </div>
         </div>
       </div>
@@ -49,8 +57,10 @@ export class Sign_In extends Component {
             invalid: undefined,
         });
     }
-
-    OnLoginsubmit(ev){alert("faf")
+    onClickReg(ev){
+      return this.env.router.navigate({ to: 'signup' });
+    }
+    OnLoginsubmit(ev){
         const xhr = new window.XMLHttpRequest();
         xhr.open('POST', '/do_login');
         const formData = new FormData(ev.currentTarget);
@@ -60,8 +70,8 @@ export class Sign_In extends Component {
             console.log(response.role);
             if(response.role === "Shopper") 
             {
-                document.cookie = `session_id = ${response.session_id}`;
-                odoo.session_info={
+              document.cookie = `session_id = ${response.session_id}`;
+              odoo.session_info={
                     user_id: response.user_id,
                     is_valid: response.is_valid,
                     session_id: response.session_id,

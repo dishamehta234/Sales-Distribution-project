@@ -13,19 +13,31 @@ const SIGNUP_TEMPLATE = xml/* xml */ `
             </div>
             <div class="card-body">
                 <form action="/signup" t-on-submit.prevent="_onSubmitForm">
-                    <input type="radio" name="role" id="shrole" value="Shopper" />Shopper
-                    <input type="radio" name="role" id="sprole" value="Sales Person" />Sales Person
+                    <input type="radio" name="role" id="shrole" value="Shopper"/>Shopper
+                    <input type="radio" name="role" id="sprole" value="Sales Person"/>Sales Person
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
                             <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
                         </div>
-                        <input type="text" class="form-control"  name="email" placeholder="Email" id="email"/>
+                        <input type="text" class="form-control"  name="name" placeholder="Name" id="name"/>
                     </div>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
+                            <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
+                        </div>
+                        <input type="text" class="form-control"  name="unm" placeholder="Email" id="unm"/>
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
                         </div>
                         <input type="text" class="form-control" name="mobilenum" placeholder="Mobile Number" id="mobileno"/>
+                    </div>
+                    <div class="input-group form-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
+                        </div>
+                        <input type="text" class="form-control" name="address" placeholder="Address" id="address"/>
                     </div>
                     <div class="input-group form-group">
                         <div class="input-group-prepend">
@@ -46,6 +58,11 @@ const SIGNUP_TEMPLATE = xml/* xml */ `
                         <input type="submit" value="Register" class="btn float-right login_btn" />
                     </div>
                 </form>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-center links">
+                    Alrady have an account?<a t-on-click="onClickLogin">Sign In</a>
+                </div>
             </div>
         </div>
     </div>
@@ -70,6 +87,7 @@ export class Sign_Up extends Component{
         xhr.send(JSON.stringify(Object.fromEntries(formData.entries())));
         xhr.onload = async () => {
             if (xhr.status === 200) {
+                alert('data inserted.......');
                 this.env.router.navigate({to: 'signin'});
             }
         };
@@ -92,4 +110,12 @@ export class Sign_Up extends Component{
         _onKeyUpPwd(ev) {
             this._checkPwd();
         }
+        redirectLogin(ev) {
+            this.env.router.navigate({to: 'signin' });   
+        }
+
+        onClickLogin(ev) {
+             return this.env.router.navigate({ to: 'signin' });
+        } 
+        
 }

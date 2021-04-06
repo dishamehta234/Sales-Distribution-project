@@ -13,6 +13,9 @@ const PAYMENT_TEMPLATE = xml/* xml */ `
             <div class="card-body">
                 <form action="/payment">
                     <h3 align="center">Payment</h3>
+                    <div class="d-flex justify-content-center links">
+                        see previous payments <a href="#" t-on-click="payment_list">See List</a>
+                    </div>
                     <p>Choose any Payment Method Either Cash or Cheque</p>
                     <div class="panel-group">
                         <input type="radio" id="cash" name="payment" value="ByCash" t-on-click="show1()"/>By Cash
@@ -61,5 +64,15 @@ export class Payment extends Component{
         document.getElementById('paycheque').style.display = 'block';
         document.getElementById('paycash').style.display = 'none';
 
+    }
+    payment_list(ev){
+                const xhr = new window.XMLHttpRequest();
+                xhr.open('POST', '/previous_payment_list');
+                xhr.send(JSON.stringify({'session_id': 'blank'}));
+                xhr.onload = async () => {
+                    const response = JSON.parse(xhr.response);
+                    this.env.bus.trigger('payment_list', {valid: response.payment_list});
+                }
+                this.env.router.navigate({ to: 'payment_list' });
     }
 }

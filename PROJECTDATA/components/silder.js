@@ -161,7 +161,7 @@ const SILDER_TEMPLATE = xml/* xml */ `
 	            </div>
 	            <div class="col-md-6">
 	                <div class="full text_align_right_img">
-	                    <img src="images/g5.jpeg" alt="#"  width="75%" />
+	                    <img src="images/g5.jpeg" alt="#" height="50" width="50" />
 	                </div>
 	            </div>
 	        </div>
@@ -198,20 +198,22 @@ const SILDER_TEMPLATE = xml/* xml */ `
 	                    	<a class="main_bt transparent" href="#">View</a>
 	                    </div>
 	                    <div class="blog_details">
-	                        <h3>Food Jam</h3>
-	                        <p>Food Jam for Kids</p>
+	                        <h3>Kitchen Jam</h3>
+	                        <p>pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+	                        </p>
 	                    </div>
 	                </div>
 	            </div>
 	            <div class="col-md-4 col-sm-6 col-xs-12">
 	                <div class="full news_blog">
-	                    <img class="img-responsive" src="images/images1.jpeg" alt="#" />
+	                    <img class="img-responsive" src="images/images1.jpeg" alt="#"/>
 	                    <div class="overlay">
 	                    	<a class="main_bt transparent" href="#">View</a>
 	                    </div>
 	                    <div class="blog_details">
-	                        <h3>Dairy Products</h3>
-	                        <p>Dairy Products</p>
+	                        <h3>Kithen Jam</h3>
+	                        <p>pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+	                        </p>
 	                    </div>
 	                </div>
 	            </div>
@@ -264,4 +266,4 @@ const SILDER_TEMPLATE = xml/* xml */ `
 
 export class Silder extends Component{
 	  static template = SILDER_TEMPLATE;
-	}
+}

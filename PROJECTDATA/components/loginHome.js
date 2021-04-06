@@ -3,7 +3,7 @@ const { xml } = owl.tags;
 const { RouteComponent } = owl.router;
 const { whenReady } = owl.utils;
 const { useRef, useDispatch, useState, useStore } = owl.hooks;
-const { qweb } = owl;
+const {qweb} = owl;
 const { EventBus } = owl.core;
 
 const LOGINHOME_TEMPLATE =xml /* xml */
@@ -14,9 +14,9 @@ const LOGINHOME_TEMPLATE =xml /* xml */
 export class Login_Home extends Component {
   static template = LOGINHOME_TEMPLATE;
     constructor() {
-        super(...arguments);
-        this.state = useState({
-            invalid: undefined,
-        });
-    }    
+      super(...arguments);
+      this.state = useState({
+      invalid: undefined,
+    });
+  }
 }

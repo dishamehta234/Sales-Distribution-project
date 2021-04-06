@@ -94,7 +94,7 @@ const ABOUT_TEMPLATE = xml/* xml */ `
 
 	export class About_us extends Component{
 	  static template = ABOUT_TEMPLATE;
-	  _aboutUs(ev)
+	  aboutus(ev)
 	  {
 	  	return this.env.router.navigate({ to: 'aboutus'});
 	  }

@@ -14,8 +14,19 @@ import { Header } from "./components/header.js";
 import { Silder } from "./components/silder.js";
 import { User_Form } from "./components/user_form.js";
 import { Login_Home } from "./components/loginHome.js";
-import { Order_sales } from "./components/salesPerson/order_sales.js";
-import { Payment } from "./components/salesPerson/payment.js";
+import { About_us } from "./components/aboutus.js";
+import { Order_sales } from "/components/salesPerson/order_sales.js";
+import { Payment } from "/components/salesPerson/payment.js";
+import { Day_list } from "/components/salesPerson/day_list.js";
+import { payment_list } from "/components/salesPerson/payment_list.js";
+//import { order_list } from "/components/salesPerson/order_list.js";
+import { completed_order_list } from "/components/salesPerson/completed_order_list.js";
+import { sales_person_profile } from "/components/salesPerson/sales_person_profile.js";
+import { product_list } from "/components/salesPerson/product_list.js";
+import { shopper_profile } from "/components/shopper/shopper_profile.js";
+import { shop_profile } from "/components/shopper/shop_profile.js";
+import { shop_order_list } from "/components/shopper/shop_order.js";
+import { sp_visited } from "/components/shopper/sp_visited_shop.js";
 
 const APP_TEMPLATE = xml/* xml */ `
    	<div>
@@ -26,43 +37,30 @@ const APP_TEMPLATE = xml/* xml */ `
 
 class App extends Component {
     static template = APP_TEMPLATE;
-    static components = {  Footer, RouteComponent, Header, Order_sales, Payment };
-
-    async willStart() {
-            const session_id = localStorage.getItem('session_id');
-                // const sessionPromise = new Promise((resolve) => {return resolve});
-            if(session_id){
-                const xhr = new window.XMLHttpRequest();
-                xhr.open('POST', '/session_validate');
-                xhr.send(JSON.stringify({'session_id': session_id}));
-                xhr.onload = async () => {
-                    const response = JSON.parse(xhr.response);
-                    if (response.valid === true) {
-                        this.env.bus.trigger('login_changed', {valid: true});
-                        this.env.router.navigate({to: 'loginhome'});
-                    }
-                    else if (response.valid === false) {
-                        this.env.bus.trigger('login_changed', {valid: false});
-                        this.env.router.navigate({to: 'home'});
-                    }
-                };
-            }
-            else {
-                    this.env.bus.trigger('login_changed', {valid: false});
-                    this.env.router.navigate({to: 'home'});
-            }
-        }
+    static components = {  Footer, RouteComponent, Header };
 }
 
 	const ROUTES = [
 		{ name: "signup", path: "/signup", component: Sign_Up },
 		{ name: "signin", path: "/signin", component: Sign_In },
 		{ name: "regshop", path: "/regshop", component: Reg_shop },
-        { name: "loginhome", path: "/loginhome", component: Login_Home },
         { name: "userform", path: "/user_form", component: User_Form },
+		{ name: "home", path: "/", component: Silder },
+        { name: "loginhome", path: "/loginhome", component: Login_Home },
+        { name: "aboutus", path: "/aboutus", component: About_us },
         { name: "ordersales", path: "/ordersales", component: Order_sales },
         { name: "payment", path: "/payment", component: Payment },
-		{ name: "home", path: "/", component: Silder }
+        { name: "day_list", path: "/day_list", component: Day_list },
+        { name: "payment_list", path: "/payment_list", component: payment_list },
+        //{ name: "/order_list", path: "/order_list", component: order_list },
+        { name: "completed_order_list", path: "/completed_order_list", component: completed_order_list },
+        { name: "sales_person_profile", path: "/sales_person_profile", component: sales_person_profile },
+        { name: "product_list", path: "/product_list", component: product_list },
+        { name: "shopper_profile", path: "/shopper_profile", component: shopper_profile },
+        { name: "shop_order_list", path: "/shop_order_list", component: shop_order_list },
+        { name: "shop_profile", path: "/shop_profile", component: shop_profile },
+        { name: "sp_visited", path: "/sp_visited", component: sp_visited}
+
 	];
 
 	function makeEnvironment() {
@@ -73,6 +71,17 @@ class App extends Component {
     env.bus = new EventBus();
     return env;
 }
+	function makeStore() {
+    const localState = window.localStorage.getItem("PROJECTDATA");
+    const state = localState ? JSON.parse(localState) : initialState;
+    const store = new Store({ state, actions });
+    store.on("update", null, () => {
+      localStorage.setItem("PROJECTDATA", JSON.stringify(store.state));
+    });
+    return store;
+  }   
+
+  	
 	App.env = makeEnvironment();
 
 	async function setup() {
